@@ -1,6 +1,8 @@
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -30,6 +32,14 @@ class Process implements Runnable {
     private int timeQuantum; // Time slice (time quantum) allowed per CPU access (in milliseconds)
     private int remainingTime; // Time left for the process to finish its execution
     private int priority; //feature1
+
+
+// FEATURE 3:
+private long creationTime;      
+private long totalWaitingTime;  
+private long lastReadyTime;     
+
+
     // Constructor to initialize the process with name, burst time, and time quantum
     public Process(String name, int burstTime, int timeQuantum , int priority) {
         this.name = name;
@@ -37,6 +47,14 @@ class Process implements Runnable {
         this.timeQuantum = timeQuantum;
         this.remainingTime = burstTime; // Initially, remaining time is equal to the burst time
         this.priority = priority; //feature1
+
+
+// FEATURE 3:
+this.creationTime = System.currentTimeMillis(); // Record when process is created
+this.totalWaitingTime = 0; // Start with 0 waiting time
+this.lastReadyTime = this.creationTime; // Initially, process is ready at creation
+
+
     }
 
     // This method will be called when the thread for this process is started
@@ -141,6 +159,42 @@ class Process implements Runnable {
     public int getPriority() {
         return priority;
     }
+// feature3
+public long getCreationTime() {
+        return creationTime;
+    }
+public long getTotalWaitingTime() {
+        return totalWaitingTime;
+    }
+public long getLastReadyTime() {
+        return lastReadyTime;
+    }
+
+// FEATURE 3: Method to update waiting time 
+
+public void updateWaitingTime() {
+
+    long currentTime = System.currentTimeMillis();
+
+    long waitTime = currentTime - lastReadyTime; 
+
+    totalWaitingTime += waitTime;
+}
+
+// FEATURE 3: Method to set last ready time when process re-enters queue
+
+public void setLastReadyTime(long time) {
+
+    this.lastReadyTime = time;
+}
+
+// FEATURE 3: Calculate turnaround time = waiting time + burst time
+
+public long getTurnaroundTime() {
+
+    return totalWaitingTime + burstTime;
+
+}
 
     // Check if the process has finished (i.e., no remaining time)
     public boolean isFinished() {
@@ -151,6 +205,10 @@ class Process implements Runnable {
 public class SchedulerSimulation {
     // FEATURE 2: Count context switches
  private static int contextSwitchCount = 0;
+
+// FEATURE 3: List to store all completed processes for summary
+private static List<Process> completedProcesses = new ArrayList<>();
+
     public static void main(String[] args) {
         // ⚠️ IMPORTANT: Put your student ID here to seed the random number generator
         // This makes your output unique to you - DO NOT forget to change this!
@@ -232,6 +290,12 @@ public class SchedulerSimulation {
             // FEATURE 2: Count each time a process starts running
               contextSwitchCount++;
 
+// FEATURE 3: Update waiting time for this process before it runs
+processMap.get(currentThread).updateWaitingTime();
+
+
+
+
             // Print the current process queue (list of process IDs in the queue)
             System.out.println(Colors.BOLD + Colors.MAGENTA + "┌─ Ready Queue " + "─".repeat(65) + Colors.RESET);
             System.out.print(Colors.MAGENTA + "│ " + Colors.RESET + Colors.BRIGHT_WHITE + "[" + Colors.RESET);
@@ -265,6 +329,8 @@ public class SchedulerSimulation {
             if (!process.isFinished()) {
                 // If the process still has remaining time, check if there are more processes in queue
                 if (!processQueue.isEmpty()) {
+//feature3: Update last ready time before re-enqueueing
+process.setLastReadyTime(System.currentTimeMillis()); // Update last ready time before re-enqueueing
                     // Re-enqueue the process to give it another chance to run in the next round
                     addProcessToQueue(process, processQueue, processMap);
                 } else {
@@ -273,10 +339,15 @@ public class SchedulerSimulation {
                                       Colors.RESET + Colors.YELLOW + " is the last process → running to completion" + 
                                       Colors.RESET);
                     process.runToCompletion(); // Run until the process completes
-                }
+// FEATURE 3: Add to completed processes list for summary
+completedProcesses.add(process); }
+
+                  }  else {
+                    //  feature 3: If the process has finished, add it to the completed processes list
+                    completedProcesses.add(process);
             }
         }
-        
+       
         // End of the scheduler simulation
         System.out.println(Colors.BOLD + Colors.BRIGHT_GREEN + 
                           "╔════════════════════════════════════════════════════════════════════════════════╗" + 
@@ -313,11 +384,13 @@ System.out.println(Colors.BOLD + Colors.BRIGHT_YELLOW +
         Colors.RESET + "\n");
 
 
-
-
+ 
+// FEATURE 3: Display waiting time and turnaround time summary
+displayWaitingTimeSummary();
 
     }
-    
+  
+
     // Method to add a process to the queue and map, while printing a "ready" message
     public static void addProcessToQueue(Process process, Queue<Thread> processQueue, 
                                         Map<Thread, Process> processMap) {
@@ -336,4 +409,85 @@ System.out.println(Colors.BOLD + Colors.BRIGHT_YELLOW +
                           " │ Burst time: " + Colors.YELLOW + process.getBurstTime() + "ms" +  " | Priority: " + process.getPriority()+
                           Colors.RESET);
     }
-}
+
+
+// FEATURE 3: Method to display waiting time & turnaround time summary table
+    // Shows Process Name, Burst Time, Priority, Waiting Time, and Turnaround Time for each process
+    public static void displayWaitingTimeSummary() {
+        // Print table header with decorative border
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + 
+                          "âââââââââââââââââââââââââââââââââââââââ" + 
+                          Colors.RESET);
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET + 
+                          Colors.BG_BLUE + Colors.BRIGHT_WHITE + Colors.BOLD + 
+                          "                PROCESS WAITING & TURNAROUND TIME SUMMARY                        " + 
+                          Colors.RESET + Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET);
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + 
+                          "â âââââââââââââââââââââââââââââââââââââââââ£" + 
+                          Colors.RESET);
+        
+        // Print column headers
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET + 
+                          "  " + Colors.BOLD + Colors.BRIGHT_WHITE + 
+                          String.format("%-10s", "Process") + 
+                          String.format("%-12s", "Burst Time") + 
+                          String.format("%-10s", "Priority") + 
+                          String.format("%-15s", "Waiting Time") + 
+                          String.format("%-18s", "Turnaround Time") + 
+                          Colors.RESET + "   " +
+                          Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET);
+        
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + 
+                          "â ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ£" + 
+                          Colors.RESET);
+        
+        // Calculate totals for average calculation
+        long totalWaitingTime = 0;
+        long totalTurnaroundTime = 0;
+        
+        // Print each process's information in the table
+        for (Process process : completedProcesses) {
+            // FEATURE 3: Calculate turnaround time = waiting time + burst time
+            long turnaroundTime = process.getTurnaroundTime();
+            String waitTimeStr = process.getTotalWaitingTime() + "ms";
+            String turnaroundStr = turnaroundTime + "ms";
+            
+            System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET + 
+                              "  " + Colors.BRIGHT_CYAN + 
+                              String.format("%-10s", process.getName()) + Colors.RESET +
+                              Colors.YELLOW + 
+                              String.format("%-12s", process.getBurstTime() + "ms") + Colors.RESET +
+                              Colors.MAGENTA + 
+                              String.format("%-10s", process.getPriority()) + Colors.RESET +
+                              Colors.BRIGHT_GREEN + 
+                              String.format("%-15s", waitTimeStr) + Colors.RESET +
+                              Colors.BRIGHT_YELLOW + 
+                              String.format("%-18s", turnaroundStr) + Colors.RESET +
+                              "   " +
+                              Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET);
+            
+            totalWaitingTime += process.getTotalWaitingTime();
+            totalTurnaroundTime += turnaroundTime;
+        }
+        
+        // Print separator before averages
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + 
+                          "â ââââââââââââââââââââââââââââââââââââââââââ£" + 
+                          Colors.RESET);
+        
+        // Calculate and display averages
+        double avgWaitingTime = (double) totalWaitingTime / completedProcesses.size();
+        double avgTurnaroundTime = (double) totalTurnaroundTime / completedProcesses.size();
+        
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET + 
+                          "  " + Colors.BOLD + Colors.BRIGHT_YELLOW + 
+                          String.format("%-47s", "Averages:") + 
+                          String.format("%-15s", String.format("%.2fms", avgWaitingTime)) + 
+                          String.format("%-18s", String.format("%.2fms", avgTurnaroundTime)) + 
+                          Colors.RESET + "   " +
+                          Colors.BOLD + Colors.BRIGHT_CYAN + "â" + Colors.RESET);
+        
+        System.out.println(Colors.BOLD + Colors.BRIGHT_CYAN + 
+                          "âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ" + 
+                          Colors.RESET + "\n");
+    }}
