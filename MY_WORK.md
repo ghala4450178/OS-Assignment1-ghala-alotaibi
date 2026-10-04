@@ -33,13 +33,13 @@
 | **Student ID** | [445052178] |
 | **University Email** | [445052178]@std.psau.edu.sa |
 | **GitHub Username** | [ghala4450178] |
-| **Repository Link** | [Paste your repository link here] |
+| **Repository Link** | [https://github.com/ghala4450178/OS-Assignment1-ghala-alotaibi.git] |
  
 ---
 
 ## 🎥 Video Link
 
-**Video Link**: [Paste your video link here]
+**Video Link**: [https://drive.google.com/drive/folders/1i2-fflJP-6HybXxHIFGGzd9laE7WLkkp?usp=sharing]
 
 > ⚠️ **WARNING:** The video must be **publicly accessible** ("Anyone with the link can view") on **Google Drive**, **YouTube (Unlisted or Public)** or any other cloud file-sharing system. A private, restricted or broken link counts as a **missing video (-1 mark)**.
 >
@@ -155,42 +155,43 @@
 
 ---
 
-### Entry 3 - [Date and Time]
-**What I did**:
+### Entry 3 - [October 4, 2026, 12:30 pM]
+**What I did**:  Added the Context Switch Counter feature.
 
-**Details**:
+**Details**: added a counter to track the number of times a new process starts running. The counter increases whenever a process is taken from the ready queue and starts execution. I also added an output at the end of the simulation to display the total number of context switches.
 
-**Challenges**:
+**Challenges**:Making sure the counter increases at the correct point in the scheduler without changing the existing Round-Robin logic.
 
-**Solution**:
+**Solution**:I placed the counter increment after the process is removed from the ready queue and before it starts running. I then tested the program and checked that the total context switches were displayed correctly.
 
-**Time spent**:
-
----
-
-### Entry 4 - [Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
+**Time spent**: 50 minutes
 
 ---
 
-### Entry 5 - [Date and Time]
-**What I did**:
+### Entry 4 - [October 4, 2026, 4:35 pM]
+**What I did**: Added the Waiting Time Tracking feature.
 
-**Details**:
+**Details**: I used System.currentTimeMillis() to track how long each process waits in the ready queue. I added timing fields and methods to calculate the total waiting time. I also calculated the turnaround time using the waiting time and burst time. Finally, I added a summary table to display the results for each completed process.
 
-**Challenges**:
 
-**Solution**:
+**Challenges**: Making sure the waiting time was updated correctly whenever a process was taken from or returned to the ready queue.
 
-**Time spent**:
+**Solution**: I recorded the time when a process entered the ready queue and updated its waiting time when it started running. I tested the program and verified that the final table displayed the waiting time and turnaround time correctly.
+
+**Time spent**:  65 minutes
+
+---
+
+### Entry 5 - [October 4, 2026, 8:20 pM]
+**What I did**: Completed the assignment questions and recorded the demonstration video.
+
+**Details**: I completed the required questions in MY_WORK.md and reviewed the answers based on my implementation and program output. I also prepared and recorded a short demonstration showing the project, the implemented features, and the program execution.
+
+**Challenges**: Making sure the answers matched my own implementation and that the demonstration covered the required parts of the assignment within the required time.
+
+**Solution**: I reviewed my code and output before answering the questions. I then recorded the demonstration and checked that the main features and results were clearly shown.
+
+**Time spent**: 1hour
 
 ---
 
@@ -305,15 +306,19 @@
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[When a process does not finish within its time quantum, it is placed back into the ready queue to wait for another turn. In my output, P5 had a burst time of 4997ms and the time quantum was 4000ms, so P5 did not finish after its first quantum and had 997ms remaining. Therefore, P5 was re-queued once before it finished. Re-queuing is important for fairness because it allows other processes to get CPU time instead of letting one long process use the CPU continuously.]
 
 Example from my output:
-```
+``` P5 executing quantum [4000ms]
+P5 completed quantum 4000ms | Overall progress: 80%
+Remaining time: 997ms
+P5 yields CPU for context switch
+P5 added to ready queue | Burst time: 4997ms | Priority: 6
 [Paste a relevant snippet from your program output here showing a process being re-queued]
 ```
 
 **Explanation of example:**
-[Explain what is happening in the output snippet you pasted.]
+[P5 needed 4997ms to finish, but the time quantum was only 4000ms. After using its first quantum, P5 still had 997ms remaining, so it yielded the CPU and was added back to the ready queue. It later received another quantum of 997ms and finished execution.]
 
 ## Question 3: Thread Lifecycle
 
@@ -323,15 +328,15 @@ Example from my output:
 
 **Your Answer:** *(3-5 sentences overall; one short explanation per state)*
 
-1. **New**: [When is P1 in the New state?]
+1. **New**: [P1 is in the New state when its Thread object is created in addProcessToQueue() using new Thread(process). At this point, the thread has been created but has not started running yet.]
 
-2. **Runnable**: [When does P1 become Runnable?]
+2. **Runnable**: [P1 becomes Runnable when currentThread.start() is called in the scheduler loop. The thread is then ready to run and the JVM can schedule it for execution.]
 
-3. **Running**: [When is P1 Running?]
+3. **Running**: [P1 is Running when its run() method is executing. Inside run(), the process simulates CPU execution and updates its progress.]
 
-4. **Waiting**: [When and why would a thread be Waiting?]
+4. **Waiting**: [The main scheduler thread enters the Waiting state when it calls currentThread.join(), because it waits for P1's thread to finish. P1 itself uses Thread.sleep() inside run(), which temporarily puts P1 into the TIMED_WAITING state.]
 
-5. **Terminated**: [When is P1 Terminated?]
+5. **Terminated**: [P1 becomes Terminated after its run() method finishes and the thread completes its execution. At this point, the thread cannot be started again.]
 
 ## Question 4: Real-World Applications
 
@@ -360,13 +365,13 @@ Example from my output:
 ## Summary
 
 **Key concepts I understood through these questions:**
-1.
-2.
-3.
+1.Round-Robin scheduling gives each process a fair chance to use the CPU.
+2.Threads go through different states such as New, Runnable, Running, Waiting, and Terminated.
+3.The ready queue and time quantum help control process execution and context switching.
 
 **Concepts I need to study more:**
-1.
-2.
+1.Thread lifecycle and the differences between thread states.
+2.Context switching and waiting time calculations.
 
 ---
 
