@@ -29,10 +29,10 @@
 
 | Field | Your Answer |
 |-------|-------------|
-| **Full Name** | [Write your full name here] |
-| **Student ID** | [Write your student ID here] |
-| **University Email** | [yourid]@std.psau.edu.sa |
-| **GitHub Username** | [your-github-username] |
+| **Full Name** | [Ghala Abdullah Al-Otaibi] |
+| **Student ID** | [445052178] |
+| **University Email** | [445052178]@std.psau.edu.sa |
+| **GitHub Username** | [ghala4450178] |
 | **Repository Link** | [Paste your repository link here] |
  
 ---
@@ -129,29 +129,29 @@
 
 ## Your Development Log
 
-### Entry 1 - [Date and Time]
-**What I did**:
+### Entry 1 - [October 2, 2026, 11:00 AM]
+**What I did**: Set up my GitHub repository and prepared the assignment project.
 
-**Details**:
+**Details**: Created my GitHub account, forked the starter repository, renamed it, and added my student ID to the project.
 
-**Challenges**:
+**Challenges**: Setting up the repository and connecting it correctly with VS Code.
 
-**Solution**:
+**Solution**: Followed the assignment instructions and checked that the project worked correctly.
 
-**Time spent**:
+**Time spent**: 23 minutes
 
 ---
 
-### Entry 2 - [Date and Time]
-**What I did**:
+### Entry 2 - [October 3, 2026, 11:15 AM]
+**What I did**: Added the Process Priority feature.
 
-**Details**:
+**Details**: Added a random priority from 1–10 and displayed it when each process entered the ready queue. The FIFO order remained unchanged.
 
-**Challenges**:
+**Challenges**: Making sure the priority was generated correctly from 1–10 and displayed for each process. I also had to make sure that adding the priority did not change the FIFO order of the ready queue. I checked the output to confirm that different priorities were generated while the processes still entered the queue in their original order.
 
-**Solution**:
+**Solution**: I kept the existing FIFO queue logic unchanged and used the priority only for storing and displaying the process priority.
 
-**Time spent**:
+**Time spent**: 40 minutes
 
 ---
 
@@ -237,7 +237,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[I learned that multithreading allows a program to run different tasks using separate threads. In this assignment, the Process class implements Runnable, which allows it to be used with a thread. I learned that Thread.start() starts the thread, while Thread.sleep() is used to simulate the process running time. I also learned that Thread.join() makes the program wait for a thread to finish. The ready queue is used to organize the processes before they run. Overall, this assignment helped me understand how threads can be used to simulate processes in a CPU scheduler.]
 
 ## Question 2: What was the most challenging part of this assignment?
 
@@ -245,7 +245,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[The most challenging part for me was adding the priority feature without changing the FIFO order of the ready queue. I had to make sure that each process gets a random priority from 1 to 10. I also needed to display the priority when the process was added to the ready queue. I kept the existing queue code the same and only added the priority information to the process. After running the program, I checked the output to make sure the priority was displayed correctly and the queue order was still FIFO]
 
 ## Question 3: How did you overcome the challenges you faced?
 
@@ -253,7 +253,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[I overcame the challenge by testing my code after each small change. First, I checked how the priority was created and passed to the Process object. Then, I changed the priority range to 1–10 and ran the program again. I checked the output to make sure the priority was shown when each process entered the ready queue. I also checked that the processes were still added in the same FIFO order. Testing the code step by step helped me find and fix mistakes more easily.]
 
 ## Question 4: How can you apply multithreading concepts in real-world applications?
 
@@ -261,7 +261,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[Multithreading can be useful when an application needs to do more than one task at the same time. For example, a mobile application can use a thread to load data while the user continues using the application. A web browser can also use different threads for tasks such as loading pages and playing media. This is related to my assignment because each simulated process is run using a Java thread. Learning this concept can help me understand how real applications handle multiple tasks.]
 
 ### Optional: What would you like to learn more about?
 
@@ -293,7 +293,7 @@
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[ A process is a program that has its own memory, while a thread runs inside a process and shares its resources. A process usually needs more resources to create, while a thread is lighter and easier to create. In this assignment, the Process class is a simulated process, and it is run by a real Java thread. In addProcessToQueue(), new Thread(process) creates the thread that runs the simulated process.]
 
 ## Question 2: Ready Queue Behavior
 
@@ -341,21 +341,21 @@ Example from my output:
 
 **Your Answer:** *(3-5 sentences per example)*
 
-### Example 1 (operating-system level): [Name of scenario]
+### Example 1 (operating-system level): [CPU Scheduler]
 
 **Description**:
-[Describe the real-world scenario.]
+[A CPU scheduler manages several processes that need to use the CPU. Each process gets a small amount of CPU time called the time quantum. When the time quantum ends, the scheduler switches to another process.]
 
 **Why Round-Robin works well here**:
-[Fairness, responsiveness, predictability?]
+[Round-Robin is fair because every process gets a turn to use the CPU. It also keeps the system responsive because one process cannot use the CPU for too long. The context switch happens when the scheduler moves from one process to another.]
 
-### Example 2: [Name of application/scenario]
+### Example 2: [Web Server]
 
 **Description**:
-[Describe the real-world scenario or application.]
+[A web server can handle many client requests at the same time using threads. Each request can be treated like a task, and the CPU can give each task a small amount of time before moving to another one. This is similar to the processes and threads in my simulation.]
 
 **Why Round-Robin works well here**:
-[Fairness, responsiveness, predictability?]
+[Round-Robin can give different requests a fair chance to use the CPU. It can also improve responsiveness because one request does not keep the CPU for a long time. The time quantum controls how long each task runs before a context switch occurs.]
 
 ## Summary
 
